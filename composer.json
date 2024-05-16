@@ -1,0 +1,16 @@
+{
+    "name": "chach/good",
+
+    "autoload": {
+        "psr-4": {
+            "app\\": "./"
+        }
+    },
+    "authors": [
+        {
+            "name": "Gio Iovashvilie",
+            "email": "iovashvili.gio11@gmail.com"
+        }
+    ],
+    "require": {}
+}
