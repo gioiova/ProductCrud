@@ -4,7 +4,7 @@ namespace app;
 
 use app\models\Product;
 use PDO;
-
+use Dotenv\Dotenv;
 class Database
 {
     public $pdo = null;
@@ -13,13 +13,24 @@ class Database
 
     public function __construct()
     {
-        //connect to db
-        $this->pdo = new PDO('mysql:host=localhost;port=3306;dbname=products_crud','root','');
+        $dotenv = Dotenv::createImmutable(__DIR__ . '/'); // Adjust the path if necessary
+        $dotenv->load();
 
+        $dbHost = $_ENV['DB_HOST'];
+        $dbPort = $_ENV['DB_PORT'];
+        $dbName = $_ENV['DB_NAME'];
+        $dbUser = $_ENV['DB_USER'];
+        $dbPass = $_ENV['DB_PASS'];
 
+        // Connect to DB using environment variables
+        $this->pdo = new PDO("mysql:host=$dbHost;port=$dbPort;dbname=$dbName", $dbUser, $dbPass);
         //throw exception if connection failed
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         self::$db = $this;
+
+
+
+
     }
 
 
