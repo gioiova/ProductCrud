@@ -102,7 +102,6 @@ class Database
         $statement->bindValue(':price',$product->price);
         $statement->bindValue(':date',date('Y-m-d H:i:s'));
 
-//execute am kvelapers gadaitans bazashi rasac shevitan inputshi
         $statement->execute();
 
     }
