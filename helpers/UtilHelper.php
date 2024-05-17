@@ -4,6 +4,8 @@ namespace app\helpers;
 
 class UtilHelper
 {
+
+    //randomstring function for creating imagepath
     public static function randomString($n)
     {
         $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';

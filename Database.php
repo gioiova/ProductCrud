@@ -11,22 +11,23 @@ class Database
     public  static $db = null;
 
 
-
     public function __construct()
     {
         //connect to db
         $this->pdo = new PDO('mysql:host=localhost;port=3306;dbname=products_crud','root','');
-        //error-is shemtxveashi isrole exception
+
+
+        //throw exception if connection failed
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         self::$db = $this;
     }
 
+
+    //get product by keyword for searching
     public  function getProducts($keyword= '')
     {
         if($keyword){
-
             $statement = $this->pdo->prepare('SELECT * FROM products WHERE title like :keyword ORDER BY create_date DESC ');
-            //procentebshi imitom rom sql-shi like-it ro edzeb procentebi unda shuashi ro modzebnos
             $statement->bindValue(':keyword',"%$keyword%");
         }else{
             $statement = $this->pdo->prepare('SELECT * FROM products  ORDER BY create_date DESC ');
@@ -46,6 +47,7 @@ class Database
         return $statement->fetch(PDO::FETCH_ASSOC);
     }
 
+    //delete
     public function deleteProduct($id)
     {
         $statement = $this->pdo->prepare('DELETE FROM products WHERE id=:id ');
@@ -55,6 +57,8 @@ class Database
 
 
     }
+
+    //update
     public function updateProduct(Product $product)
     {
 
@@ -68,13 +72,14 @@ class Database
         $statement->bindValue(':description',$product->description);
         $statement->bindValue(':price',$product->price);
         $statement->bindValue(':id',$product->id);
-//execute am kvelapers gadaitans bazashi rasac shevitan inputshi
+
         $statement->execute();
 
 
 
     }
 
+    //create
     public function createProduct(Product $product)
     {
         $statement = $this->pdo->prepare("INSERT INTO products(title,image,description,price,create_date)

@@ -17,10 +17,8 @@ class Router
     }
 
 
-//    gadaecema url da fn funqcia
     public function get($url,$fn)
     {
-        //roca url iqneba es gamoidzaxe fn funqcia
         $this->getRoutes[$url] = $fn;
 
 
@@ -28,16 +26,22 @@ class Router
 
     public function post($url,$fn)
     {
-        //roca url iqneba es gamoidzaxe fn funqcia
+
         $this->postRoutes[$url] = $fn;
 
     }
 
     public function resolve()
     {
-        //get movida tu posti inaxeba $methodshi
+        //saving request method
         $method = strtolower($_SERVER['REQUEST_METHOD']);
-        $url = $_SERVER['PATH_INFO'] ?? '/';
+        $url = $_SERVER['REQUEST_URI'] ?? '/';
+        if(strpos($url,'?') !== false){
+            $url = substr($url,0,strpos($url,'?'));
+        }
+
+
+
 
         if($method === 'get') {
             $fn = $this->getRoutes[$url] ?? null;
@@ -46,7 +50,7 @@ class Router
             $fn = $this->postRoutes[$url] ?? null;
         }
 
-        //tu funqcia ar arsebobs
+
         if(!$fn){
             echo "Page not found";
             exit;
@@ -55,14 +59,11 @@ class Router
 
 
         $fn[0] = new $fn[0];
-
-        //this aris routeri sadac exla var
         echo call_user_func($fn,$this);
 
 
     }
 
-    //render miigebs views da daarenderebs layoutshi
     public  function renderView($view, $params= [])
     {
 
@@ -75,8 +76,7 @@ class Router
         ob_start();
         include __DIR__."/views/$view.php";
 
-        //es contenti aris is rac weria $view.php-shi iqneba es create,update
-        //contenti xdeba create an update php da gamodis _layout
+
         $content = ob_get_clean();
         include __DIR__."/views/_layout.php";
 

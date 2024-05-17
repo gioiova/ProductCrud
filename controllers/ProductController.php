@@ -24,25 +24,46 @@ class  ProductController
     public function create(Router $router)
     {
         $productData = [
-            'image' =>''
+            'image' =>'',
+            'title'=> '',
+            'description'=> '',
+            'price' => ''
         ];
 
+        $errors = [];
+
         if($_SERVER['REQUEST_METHOD']=== 'POST'){
-            //avawyve zevit defined product-is masivi
+
             $productData['title']  = $_POST['title'];
             $productData['description']  = $_POST['description'];
             $productData['price']  = $_POST['price'];
             $productData['imageFile'] = $_FILES['image'] ?? null;
 
+            //Form validation
 
-            $product = new Product();
-            $product->load($productData);
-            $product->save();
-            header('LOCATION:/products');
-            exit;
+            if(empty(trim($productData['title']))){
+                $errors[] = 'Product title is required';
+            }
+
+            if(!$productData['price']){
+                $errors[] = 'Product price is required';
+            }
+
+
+            if(empty($errors)) {
+
+                $product = new Product();
+                $product->load($productData);
+                $product->save();
+                header('LOCATION:/products');
+                exit;
+            }
+
         }
+
         $router->renderView('products/create',[
-            'product'=>$productData
+            'product'=>$productData,
+            'errors'=>$errors
         ]) ;
     }
 
@@ -57,7 +78,7 @@ class  ProductController
         $productData = $router->database->getProductById($id);
 
         if($_SERVER['REQUEST_METHOD']=== 'POST'){
-            //avawyve zevit defined product-is masivi
+
             $productData['title']  = $_POST['title'];
             $productData['description']  = $_POST['description'];
             $productData['price']  = $_POST['price'];

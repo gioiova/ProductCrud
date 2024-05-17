@@ -19,7 +19,7 @@ class Product
         $this->id = $data['id'] ?? null;
         $this->title = $data['title'];
         $this->description = $data['description'];
-        $this->price = $data['price'];
+        $this->price = floatval($data['price']);
         $this->imageFile = $data['imageFile'];
         $this->imagePath = $data['image'] ?? null;
 
@@ -28,44 +28,30 @@ class Product
     public function save()
     {
 
-
-        //tu ar arsebobs images directory iqmneba
-        //validate_productis relatiurad rom shemqnas images directtorya gamovikenete __dir__
+        //creating image directory
         if(!is_dir(__DIR__.'/../public/images')){
             mkdir(__DIR__.'/../public/images');
 
         }
 
 
-
-
-        //Form validation
-
-        if(!$this->title){
-            $errors[] = 'Product title is required';
-        }
-
-        if(!$this->price){
-            $errors[] = 'Product price is required';
-        }
-
-        //tu erorebis masivi carielia vinaxavt surats
+        //create
         if(empty($errors)){
 
-
-            //imagepath aris suratis mdebareobis misamarti images/5BoJYGC9/s10.jpg
-            //suratis atvirtvisas iqmeneba imagepath randomuli saxelis directoriit
+            //creating imagepath with random name
             if($this->imageFile && $this->imageFile['tmp_name']){
 
-                //tu surati arsebobs washlis arsebuls surats radgan axali daematos
+
+                //if image exists deleting while update product
                 if($this->imagePath){
                     unlink(__DIR__.'/../public/'.$this->imagePath);
                 }
 
                 $this->imagePath = 'images/'.UtilHelper::randomString(8).'/'.$this->imageFile['name'];
                 mkdir(dirname(__DIR__.'/../public/'.$this->imagePath));
-                //randomuli saxelis directoryashi emateba atvirtuli foto tavis saxelit
-                move_uploaded_file($this->imageFile['tmp_name'],__DIR__.'/../public/'.$this->imagePath); //image['tmp_name'] saxeli emateba imagepathshi
+
+                //adding image to directory
+                move_uploaded_file($this->imageFile['tmp_name'],__DIR__.'/../public/'.$this->imagePath);
 
             }
         }
